@@ -6,6 +6,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import com.eotw95.wantnote.screen.AddWant
 import com.eotw95.wantnote.screen.EditWant
+import com.eotw95.wantnote.screen.PreviewWant
 import com.eotw95.wantnote.screen.WantList
 
 @Composable
@@ -15,15 +16,26 @@ fun AppNavigation(navController: NavHostController) {
         startDestination = Screens.Home.route,
         builder = {
             composable(Screens.Home.route) {
-                WantList()
+                WantList(
+                    onClickItem = { navController.navigate(Screens.Preview.route) }
+                )
             }
             composable(Screens.Add.route) {
                 AddWant(
-                    onClickAdd = { navController.navigateUp() }
+                    onClickAdd = { navController.navigate(Screens.Home.route) }
+                )
+            }
+            composable(Screens.Preview.route) {
+                PreviewWant(
+                    onClickBack = { navController.navigateUp() },
+                    onClickEdit = { navController.navigate(Screens.Edit.route) }
                 )
             }
             composable(Screens.Edit.route) {
-                EditWant()
+                EditWant(
+                    onClickBack = { navController.navigateUp() },
+                    onClickChange = { navController.navigate(Screens.Home.route) }
+                )
             }
         }
     )
@@ -34,5 +46,6 @@ sealed class Screens(
 ) {
     object Home: Screens("home")
     object Add: Screens("add")
+    object Preview: Screens("preview")
     object Edit: Screens("edit")
 }
