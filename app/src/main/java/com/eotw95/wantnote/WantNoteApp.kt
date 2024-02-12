@@ -8,18 +8,25 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.navigation.compose.rememberNavController
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun WantNoteApp() {
+    val navController = rememberNavController()
+
     Scaffold(
         floatingActionButton = {
-            FloatingActionButton(onClick = { /*TODO*/ }) {
+            FloatingActionButton(
+                onClick = {
+                    navController.navigate(Screens.Add.route)
+                }
+            ) {
                 Icon(imageVector = Icons.Filled.Add, contentDescription = null)
             }
         }
     ) {
-        AppNavigation()
+        AppNavigation(navController)
     }
 }

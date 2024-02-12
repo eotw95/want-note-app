@@ -1,16 +1,15 @@
 package com.eotw95.wantnote
 
 import androidx.compose.runtime.Composable
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import androidx.navigation.compose.rememberNavController
 import com.eotw95.wantnote.screen.AddWant
 import com.eotw95.wantnote.screen.EditWant
 import com.eotw95.wantnote.screen.WantList
 
 @Composable
-fun AppNavigation() {
-    val navController = rememberNavController()
+fun AppNavigation(navController: NavHostController) {
     NavHost(
         navController = navController,
         startDestination = Screens.Home.route,
@@ -19,7 +18,9 @@ fun AppNavigation() {
                 WantList()
             }
             composable(Screens.Add.route) {
-                AddWant()
+                AddWant(
+                    onClickAdd = { navController.navigateUp() }
+                )
             }
             composable(Screens.Edit.route) {
                 EditWant()
