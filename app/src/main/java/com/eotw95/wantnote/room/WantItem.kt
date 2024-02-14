@@ -9,5 +9,6 @@ import androidx.room.PrimaryKey
 data class WantItem(
     @PrimaryKey(autoGenerate = true) val id: Int,
     val link: String,
+    val description: String,
     @ColumnInfo(typeAffinity = ColumnInfo.BLOB) val image: Bitmap
 )
