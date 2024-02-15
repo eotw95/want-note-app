@@ -4,9 +4,11 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
 
-@Database(entities = [WantItem::class], version = 1)
-abstract class WantDatabase(context: Context): RoomDatabase() {
+@Database(entities = [WantItem::class], version = 1, exportSchema = false)
+@TypeConverters(BitmapConverter::class)
+abstract class WantDatabase(): RoomDatabase() {
     companion object {
         private var instanse: WantDatabase? = null
 
@@ -16,7 +18,7 @@ abstract class WantDatabase(context: Context): RoomDatabase() {
                     context,
                     WantDatabase::class.java,
                     "WantDatabase"
-                ).build()
+                ).fallbackToDestructiveMigration().build()
                 instanse = tmpInstanse
 
                 return instanse as WantDatabase

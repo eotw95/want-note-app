@@ -1,5 +1,7 @@
 package com.eotw95.wantnote.screen
 
+import android.app.Application
+import android.graphics.Bitmap
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -16,13 +18,26 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
+import com.eotw95.wantnote.room.WantItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddWant(
     onClickAdd: () -> Unit
 ) {
+    var viewModel: AddWantViewModel? = null
+    LocalViewModelStoreOwner.current?.let {
+        viewModel = viewModel(
+            it,
+            "AddWantViewModel",
+            AddWantViewModelFactory(LocalContext.current.applicationContext as Application)
+        )
+    }
+
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally
@@ -62,7 +77,17 @@ fun AddWant(
         Divider(thickness = 0.5.dp)
         Spacer(modifier = Modifier.padding(vertical = 30.dp))
         OutlinedButton(
-            onClick = onClickAdd
+            onClick = {
+                onClickAdd()
+                viewModel?.add(
+                    // Todo: dummy data
+                    WantItem(
+                        link = link,
+                        description = desc,
+                        image = Bitmap.createBitmap(64, 64, Bitmap.Config.ARGB_8888)
+                    )
+                )
+            }
         ) {
             Text(text = "欲しい物を追加")
         }
