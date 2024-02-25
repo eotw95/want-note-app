@@ -10,5 +10,5 @@ data class WantItem(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     val link: String,
     val description: String,
-    @ColumnInfo(typeAffinity = ColumnInfo.BLOB) val image: Bitmap
+    val imageUri: String
 )

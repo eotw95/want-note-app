@@ -10,7 +10,10 @@ import com.eotw95.wantnote.screen.PreviewWant
 import com.eotw95.wantnote.screen.WantList
 
 @Composable
-fun AppNavigation(navController: NavHostController) {
+fun AppNavigation(
+    navController: NavHostController,
+    startImageGallery: () -> Unit
+) {
     NavHost(
         navController = navController,
         startDestination = Screens.Home.route,
@@ -22,7 +25,8 @@ fun AppNavigation(navController: NavHostController) {
             }
             composable(Screens.Add.route) {
                 AddWant(
-                    onClickAdd = { navController.navigate(Screens.Home.route) }
+                    onClickAdd = { navController.navigate(Screens.Home.route) },
+                    onClickSetImage = startImageGallery
                 )
             }
             composable(Screens.Preview.route) {

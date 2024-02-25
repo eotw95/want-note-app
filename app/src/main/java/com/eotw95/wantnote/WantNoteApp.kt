@@ -16,7 +16,9 @@ import androidx.navigation.compose.rememberNavController
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WantNoteApp() {
+fun WantNoteApp(
+    startImageGallery: () -> Unit
+) {
     val navController = rememberNavController()
 
     Scaffold(
@@ -31,6 +33,9 @@ fun WantNoteApp() {
         }
     ) {
         Spacer(modifier = Modifier.padding(it))
-        AppNavigation(navController)
+        AppNavigation(
+            navController,
+            startImageGallery = startImageGallery
+        )
     }
 }

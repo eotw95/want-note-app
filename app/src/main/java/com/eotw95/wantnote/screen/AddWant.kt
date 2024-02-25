@@ -1,7 +1,7 @@
 package com.eotw95.wantnote.screen
 
 import android.app.Application
-import android.graphics.Bitmap
+import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -13,6 +13,7 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -27,7 +28,8 @@ import com.eotw95.wantnote.room.WantItem
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddWant(
-    onClickAdd: () -> Unit
+    onClickAdd: () -> Unit,
+    onClickSetImage: () -> Unit
 ) {
     var viewModel: AddWantViewModel? = null
     LocalViewModelStoreOwner.current?.let {
@@ -44,6 +46,7 @@ fun AddWant(
     ) {
         var link by remember { mutableStateOf("") }
         var desc by remember { mutableStateOf("") }
+        val imageUri = AddWantViewModel.imageUri.observeAsState()
 
         Spacer(modifier = Modifier.padding(vertical = 30.dp))
         OutlinedTextField(
@@ -58,7 +61,8 @@ fun AddWant(
         Spacer(modifier = Modifier.padding(vertical = 30.dp))
         Divider(thickness = 0.5.dp)
         Spacer(modifier = Modifier.padding(vertical = 30.dp))
-        OutlinedButton(onClick = { /*TODO*/ }) {
+        OutlinedButton(onClick = { onClickSetImage() }
+        ) {
             Text(text = "画像を追加")
         }
         Spacer(modifier = Modifier.padding(vertical = 30.dp))
@@ -78,13 +82,13 @@ fun AddWant(
         Spacer(modifier = Modifier.padding(vertical = 30.dp))
         OutlinedButton(
             onClick = {
+                Log.d("AddWant", "imageUri=${imageUri.value}")
                 onClickAdd()
                 viewModel?.add(
-                    // Todo: dummy data
                     WantItem(
                         link = link,
                         description = desc,
-                        image = Bitmap.createBitmap(64, 64, Bitmap.Config.ARGB_8888)
+                        imageUri = imageUri.value.toString()
                     )
                 )
             }
