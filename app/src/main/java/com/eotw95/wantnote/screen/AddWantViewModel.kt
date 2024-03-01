@@ -1,9 +1,6 @@
 package com.eotw95.wantnote.screen
 
 import android.app.Application
-import android.content.ContentResolver
-import android.graphics.Bitmap
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.LiveData
@@ -18,7 +15,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 import kotlinx.coroutines.withContext
-import java.io.IOException
 
 class AddWantViewModel(private val application: Application): ViewModel() {
 
@@ -26,17 +22,17 @@ class AddWantViewModel(private val application: Application): ViewModel() {
         private const val TAG = "AddWantViewModel"
 
         private val mutex = Mutex()
-        private var _imageUri = MutableLiveData<Uri>()
-        val imageUri: LiveData<Uri> = _imageUri
+        private var _imageUri = MutableLiveData<Uri?>()
+        val imageUri: LiveData<Uri?> = _imageUri
     }
 
     private val db = WantDatabase.getInstanse(application.applicationContext)
     private val wantRepository = WantRepository(db)
 
-    fun setImage(image: Uri) {
+    fun setImage(image: Uri?) {
         Log.d("AddWantViewModel", "setImage=${image}")
         try {
-            _imageUri.postValue(image)
+            _imageUri.postValue(requireNotNull(image))
         } catch (e: NullPointerException) {
             Log.e(TAG, "image is null")
         }
@@ -44,35 +40,13 @@ class AddWantViewModel(private val application: Application): ViewModel() {
         Log.d("AddWantViewModel", "_imagerUri=${_imageUri.value}")
     }
 
-    fun add(
-        link: String,
-        desc: String,
-        image: Uri
-    ) {
+    fun add(item: WantItem) {
         viewModelScope.launch {
             mutex.withLock {
                 withContext(Dispatchers.IO) {
-                    uriToBitmap(application.contentResolver, image)?.let {
-                        wantRepository.insert(
-                            WantItem(
-                                link = link,
-                                description = desc,
-                                image = it
-                            )
-                        )
-                    }
+                    wantRepository.insert(item)
                 }
             }
-        }
-    }
-
-    private fun uriToBitmap(contentResolver: ContentResolver, uri: Uri): Bitmap? {
-        return try {
-            val inputStream = contentResolver.openInputStream(uri)
-            BitmapFactory.decodeStream(inputStream)
-        } catch (e: IOException) {
-            e.stackTraceToString()
-            null
         }
     }
 

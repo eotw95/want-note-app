@@ -23,6 +23,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.eotw95.wantnote.room.WantItem
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -83,13 +84,13 @@ fun AddWant(
             onClick = {
                 Log.d("AddWant", "imageUri=${imageUri.value}")
                 onClickAdd()
-                imageUri.value?.let {
-                    viewModel?.add(
+                viewModel?.add(
+                    WantItem(
                         link = link,
-                        desc = desc,
-                        image = it
+                        description = desc,
+                        imageUri = imageUri.value.toString()
                     )
-                }
+                )
             }
         ) {
             Text(text = "欲しい物を追加")
