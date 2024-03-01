@@ -21,9 +21,8 @@ class MainActivity : ComponentActivity() {
         val viewModel: AddWantViewModel by viewModels {
             AddWantViewModelFactory(application)
         }
-        val launcher = registerForActivityResult(ActivityResultContracts.OpenDocument()) {
-            Log.d("Main Activity", "launcher launch")
-            viewModel.setImage(it)
+        val launcher = registerForActivityResult(ActivityResultContracts.OpenDocument()) { tmpUri ->
+            tmpUri?.let { viewModel.setImage(it) }
         }
 
         setContent {
