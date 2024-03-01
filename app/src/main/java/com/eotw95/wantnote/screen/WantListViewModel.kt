@@ -27,6 +27,10 @@ class WantListViewModel(private val application: Application): ViewModel() {
     val items: LiveData<List<WantItem>>
         get() = _items
 
+    init {
+        fetch()
+    }
+
     fun fetch() {
         viewModelScope.launch {
             mutex.withLock {
