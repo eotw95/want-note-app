@@ -1,9 +1,9 @@
 package com.eotw95.wantnote
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.result.PickVisualMediaRequest
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
@@ -21,9 +21,10 @@ class MainActivity : ComponentActivity() {
         val viewModel: AddWantViewModel by viewModels {
             AddWantViewModelFactory(application)
         }
-        val launcher = registerForActivityResult(ActivityResultContracts.OpenDocument()) {
-            Log.d("Main Activity", "launcher launch")
-            viewModel.setImage(it)
+        val launcher = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { tmpUri ->
+            tmpUri?.let {
+                viewModel.setImage(it)
+            }
         }
 
         setContent {
@@ -34,7 +35,8 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     WantNoteApp(
-                        startImageGallery = { launcher.launch(arrayOf("image/*")) }
+                        startImageGallery =
+                        { launcher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) }
                     )
                 }
             }
