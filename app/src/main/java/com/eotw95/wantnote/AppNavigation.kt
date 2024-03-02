@@ -27,9 +27,12 @@ fun AppNavigation(
                         val tmpDesc = if (desc.isEmpty()) KEY_EMPTY else desc
                         val tmpPath = if (path.isEmpty()) KEY_EMPTY else path
 
-                        val encodeLink = URLEncoder.encode(tmpLink, StandardCharsets.UTF_8.toString())
-                        val encodeDesc = URLEncoder.encode(tmpDesc, StandardCharsets.UTF_8.toString())
-                        val encodePath = URLEncoder.encode(tmpPath, StandardCharsets.UTF_8.toString())
+                        val encodeLink =
+                            URLEncoder.encode(tmpLink, StandardCharsets.UTF_8.toString())
+                        val encodeDesc =
+                            URLEncoder.encode(tmpDesc, StandardCharsets.UTF_8.toString())
+                        val encodePath =
+                            URLEncoder.encode(tmpPath, StandardCharsets.UTF_8.toString())
 
                         navController.navigate(
                             Screens.Preview.route + "/$encodeLink/$encodeDesc/$encodePath"

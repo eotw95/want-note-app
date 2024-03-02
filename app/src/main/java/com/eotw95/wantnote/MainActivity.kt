@@ -21,7 +21,8 @@ class MainActivity : ComponentActivity() {
         val viewModel: AddWantViewModel by viewModels {
             AddWantViewModelFactory(application)
         }
-        val launcher = registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { tmpUri ->
+        val launcher =
+            registerForActivityResult(ActivityResultContracts.PickVisualMedia()) { tmpUri ->
             tmpUri?.let {
                 viewModel.setImage(it)
             }
@@ -35,8 +36,11 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     WantNoteApp(
-                        startImageGallery =
-                        { launcher.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)) }
+                        startImageGallery = {
+                            launcher.launch(PickVisualMediaRequest(
+                                ActivityResultContracts.PickVisualMedia.ImageOnly)
+                            )
+                        }
                     )
                 }
             }
