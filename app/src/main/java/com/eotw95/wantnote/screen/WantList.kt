@@ -22,7 +22,7 @@ import java.io.File
 
 @Composable
 fun WantList(
-    onClickItem: () -> Unit
+    onClickItem: (String, String, String) -> Unit
 ) {
     var viewModel: WantListViewModel? = null
     LocalViewModelStoreOwner.current?.let {
@@ -41,6 +41,8 @@ fun WantList(
             if (!list.isNullOrEmpty()) {
                 items(list) { item ->
                     GridItem(
+                        link = item.link,
+                        desc = item.description,
                         imagePath = item.imagePath,
                         onClickItem = onClickItem
                     )
@@ -52,13 +54,21 @@ fun WantList(
 
 @Composable
 fun GridItem(
+    link: String,
+    desc: String,
     imagePath: String,
-    onClickItem: () -> Unit
+    onClickItem: (String, String, String) -> Unit
 ) {
     Surface(
         modifier = Modifier
             .padding(1.dp)
-            .clickable { onClickItem() }
+            .clickable {
+                onClickItem(
+                    link,
+                    desc,
+                    imagePath
+                )
+            }
     ) {
         Image(
             painter = rememberAsyncImagePainter(model = File(imagePath)),

@@ -1,6 +1,7 @@
 package com.eotw95.wantnote.screen
 
 import android.annotation.SuppressLint
+import android.app.Application
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -20,19 +21,37 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
-import com.eotw95.wantnote.R
+import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
+import androidx.lifecycle.viewmodel.compose.viewModel
+import coil.compose.rememberAsyncImagePainter
+import com.eotw95.wantnote.KEY_EMPTY
+import java.io.File
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PreviewWant(
+    link: String,
+    description: String,
+    imagePath: String,
     onClickBack: () -> Unit,
     onClickEdit: () -> Unit
 ) {
+    var viewModel: PreviewWantViewModel? = null
+    LocalViewModelStoreOwner.current?.let {
+        viewModel = viewModel(
+            it,
+            "PreviewWantViewModel",
+            PreviewWantViewModelFactory(LocalContext.current.applicationContext as Application)
+        )
+    }
+    val items = viewModel?.items?.observeAsState()
+
     Scaffold(
         topBar = {
             Row(
@@ -61,14 +80,18 @@ fun PreviewWant(
         }
     ) {
         Surface(
-            modifier = Modifier.padding(it)
+            modifier = Modifier
+                .padding(it)
         ) {
             Column(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .fillMaxWidth(),
+//                Todo: スクロールしたいけどこれだと画像が表示されない
+//                    .verticalScroll(rememberScrollState(),
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Image(
-                    painter = painterResource(id = R.drawable.sample_image),
+                    painter = rememberAsyncImagePainter(model = File(imagePath)),
                     contentDescription = null,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -78,12 +101,10 @@ fun PreviewWant(
                 ) {
                     Icon(imageVector = Icons.Filled.Info, contentDescription = null)
                     Spacer(modifier = Modifier.padding(horizontal = 5.dp))
-                    Text(text = "https://hosiimono.com")
+                    Text(text = if (link == KEY_EMPTY) "" else link)
                 }
                 Spacer(modifier = Modifier.padding(vertical = 30.dp))
-                Text(text = "テストテストテストテストテストテストテストテストテストテストテストテストテストテストテスト" +
-                        "テストテストテストテストテストテストテストテストテストテストテストテストテストテストテストテスト" +
-                        "テストテストテストテストテストテストテストテストテストテストテストテストテスト")
+                Text(text = if (description == KEY_EMPTY) "" else description)
             }
         }
     }

@@ -15,3 +15,9 @@ class WantListViewModelFactory(private val application: Application): ViewModelP
         return WantListViewModel(application) as T
     }
 }
+
+class PreviewWantViewModelFactory(private val application: Application): ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return PreviewWantViewModel(application) as T
+    }
+}
