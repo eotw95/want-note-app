@@ -1,8 +1,6 @@
 package com.eotw95.wantnote.screen
 
 import android.app.Application
-import android.net.Uri
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
@@ -20,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.viewmodel.compose.LocalViewModelStoreOwner
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
+import java.io.File
 
 @Composable
 fun WantList(
@@ -42,7 +41,7 @@ fun WantList(
             if (!list.isNullOrEmpty()) {
                 items(list) { item ->
                     GridItem(
-                        imageUrl = item.imageUri,
+                        imagePath = item.imagePath,
                         onClickItem = onClickItem
                     )
                 }
@@ -53,7 +52,7 @@ fun WantList(
 
 @Composable
 fun GridItem(
-    imageUrl: String,
+    imagePath: String,
     onClickItem: () -> Unit
 ) {
     Surface(
@@ -62,7 +61,7 @@ fun GridItem(
             .clickable { onClickItem() }
     ) {
         Image(
-            painter = rememberAsyncImagePainter(model = Uri.parse(imageUrl)),
+            painter = rememberAsyncImagePainter(model = File(imagePath)),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.size(150.dp)

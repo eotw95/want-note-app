@@ -1,7 +1,6 @@
 package com.eotw95.wantnote.screen
 
 import android.app.Application
-import android.util.Log
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -46,7 +45,7 @@ fun AddWant(
     ) {
         var link by remember { mutableStateOf("") }
         var desc by remember { mutableStateOf("") }
-        val imageUri = AddWantViewModel.imageUri.observeAsState()
+        val imagePath = AddWantViewModel.imagePath.observeAsState()
 
         Spacer(modifier = Modifier.padding(vertical = 30.dp))
         OutlinedTextField(
@@ -82,13 +81,12 @@ fun AddWant(
         Spacer(modifier = Modifier.padding(vertical = 30.dp))
         OutlinedButton(
             onClick = {
-                Log.d("AddWant", "imageUri=${imageUri.value}")
                 onClickAdd()
                 viewModel?.add(
                     WantItem(
                         link = link,
                         description = desc,
-                        imageUri = imageUri.value.toString()
+                        imagePath = imagePath.value.toString()
                     )
                 )
             }
