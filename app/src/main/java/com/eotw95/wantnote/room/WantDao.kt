@@ -11,6 +11,9 @@ interface WantDao {
     @Query("SELECT * FROM wantItems")
     suspend fun getAll(): List<WantItem>
 
+    @Query("SELECT * FROM wantItems WHERE id = :id")
+    suspend fun getItemById(id: Int): WantItem
+
     @Insert
     suspend fun insert(item: WantItem)
 

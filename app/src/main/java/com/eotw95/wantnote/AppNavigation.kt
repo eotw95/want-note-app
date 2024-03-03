@@ -22,7 +22,7 @@ fun AppNavigation(
         builder = {
             composable(Screens.Home.route) {
                 WantList(
-                    onClickItem = { link, desc, path ->
+                    onClickItem = { itemId, link, desc, path ->
                         val tmpLink = if (link.isEmpty()) KEY_EMPTY else link
                         val tmpDesc = if (desc.isEmpty()) KEY_EMPTY else desc
                         val tmpPath = if (path.isEmpty()) KEY_EMPTY else path
@@ -35,7 +35,7 @@ fun AppNavigation(
                             URLEncoder.encode(tmpPath, StandardCharsets.UTF_8.toString())
 
                         navController.navigate(
-                            Screens.Preview.route + "/$encodeLink/$encodeDesc/$encodePath"
+                            Screens.Preview.route + "/$itemId/$encodeLink/$encodeDesc/$encodePath"
                         )
                     }
                 )
@@ -46,17 +46,21 @@ fun AppNavigation(
                     onClickSetImage = startImageGallery
                 )
             }
-            composable(Screens.Preview.route + "/{link}/{desc}/{path}") {
-                it.arguments?.getString("link")?.let { link ->
-                    it.arguments?.getString("desc")?.let { desc ->
-                        it.arguments?.getString("path")?.let { path ->
-                            PreviewWant(
-                                link = link,
-                                description = desc,
-                                imagePath = path,
-                                onClickBack = { navController.navigateUp() },
-                                onClickEdit = { navController.navigate(Screens.Edit.route) }
-                            )
+            composable(Screens.Preview.route + "/{itemId}/{link}/{desc}/{path}") {
+                it.arguments?.getString("itemId")?.let { itemId ->
+                    it.arguments?.getString("link")?.let { link ->
+                        it.arguments?.getString("desc")?.let { desc ->
+                            it.arguments?.getString("path")?.let { path ->
+                                PreviewWant(
+                                    id = itemId.toInt(),
+                                    link = link,
+                                    description = desc,
+                                    imagePath = path,
+                                    onClickBack = { navController.navigateUp() },
+                                    onClickEdit = { navController.navigate(Screens.Edit.route) },
+                                    onClickDelete = { navController.navigate(Screens.Home.route) }
+                                )
+                            }
                         }
                     }
                 }

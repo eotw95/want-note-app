@@ -9,6 +9,10 @@ class WantRepository(private val db: WantDatabase) {
         return db.wantDao().getAll()
     }
 
+    suspend fun getItemById(id: Int): WantItem {
+        return db.wantDao().getItemById(id)
+    }
+
     suspend fun insert(item: WantItem) {
         db.wantDao().insert(item)
     }

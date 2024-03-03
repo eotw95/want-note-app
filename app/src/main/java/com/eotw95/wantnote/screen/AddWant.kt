@@ -84,6 +84,7 @@ fun AddWant(
                 onClickAdd()
                 viewModel?.add(
                     WantItem(
+                        id = 0,
                         link = link,
                         description = desc,
                         imagePath = imagePath.value.toString()

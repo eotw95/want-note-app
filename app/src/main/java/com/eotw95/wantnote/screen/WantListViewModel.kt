@@ -31,7 +31,7 @@ class WantListViewModel(private val application: Application): ViewModel() {
         fetch()
     }
 
-    private fun fetch() {
+    fun fetch() {
         viewModelScope.launch {
             mutex.withLock {
                 withContext(Dispatchers.IO) {

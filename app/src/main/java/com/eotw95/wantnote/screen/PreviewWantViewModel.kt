@@ -1,13 +1,10 @@
 package com.eotw95.wantnote.screen
 
 import android.app.Application
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.eotw95.wantnote.WantRepository
 import com.eotw95.wantnote.room.WantDatabase
-import com.eotw95.wantnote.room.WantItem
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.sync.Mutex
@@ -23,19 +20,13 @@ class PreviewWantViewModel(private val application: Application): ViewModel() {
     private val db = WantDatabase.getInstanse(application.applicationContext)
     private val wantRepository = WantRepository(db)
 
-    private var _items = MutableLiveData<List<WantItem>>()
-    val items: LiveData<List<WantItem>>
-        get() = _items
-
-    init {
-        fetch()
-    }
-
-    private fun fetch() {
+    fun delete(id: Int) {
         viewModelScope.launch {
             mutex.withLock {
                 withContext(Dispatchers.IO) {
-                    _items.postValue(wantRepository.getAll())
+                    val item = wantRepository.getItemById(id)
+                    wantRepository.delete(item)
+                    WantListViewModel(application).fetch()
                 }
             }
         }

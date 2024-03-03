@@ -2,6 +2,7 @@ package com.eotw95.wantnote.screen
 
 import android.annotation.SuppressLint
 import android.app.Application
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -36,21 +37,22 @@ import java.io.File
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PreviewWant(
+    id: Int,
     link: String,
     description: String,
     imagePath: String,
     onClickBack: () -> Unit,
-    onClickEdit: () -> Unit
+    onClickEdit: () -> Unit,
+    onClickDelete: () -> Unit
 ) {
-    var viewModel: PreviewWantViewModel? = null
+    var previewVM: PreviewWantViewModel? = null
     LocalViewModelStoreOwner.current?.let {
-        viewModel = viewModel(
+        previewVM = viewModel(
             it,
             "PreviewWantViewModel",
             PreviewWantViewModelFactory(LocalContext.current.applicationContext as Application)
         )
     }
-    val items = viewModel?.items?.observeAsState()
 
     Scaffold(
         topBar = {
@@ -73,7 +75,11 @@ fun PreviewWant(
                     Icon(
                         imageVector = Icons.Filled.Delete,
                         contentDescription = null,
-                        modifier = Modifier.clickable { /* Todo: delete item */ }
+                        modifier = Modifier.clickable {
+                            Log.d("PreviewWantList", "id=$id")
+                            previewVM?.delete(id)
+                            onClickDelete()
+                        }
                     )
                 }
             }
