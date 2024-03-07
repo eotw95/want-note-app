@@ -8,6 +8,7 @@ import com.eotw95.wantnote.screen.AddWant
 import com.eotw95.wantnote.screen.EditWant
 import com.eotw95.wantnote.screen.PreviewWant
 import com.eotw95.wantnote.screen.WantList
+import com.eotw95.wantnote.screen.WebWant
 import java.net.URLEncoder
 import java.nio.charset.StandardCharsets
 
@@ -58,7 +59,8 @@ fun AppNavigation(
                                     imagePath = path,
                                     onClickBack = { navController.navigateUp() },
                                     onClickEdit = { navController.navigate(Screens.Edit.route) },
-                                    onClickDelete = { navController.navigate(Screens.Home.route) }
+                                    onClickDelete = { navController.navigate(Screens.Home.route) },
+                                    onClickUri = { url -> navController.navigate(Screens.Web.route + "/$url") }
                                 )
                             }
                         }
@@ -71,6 +73,10 @@ fun AppNavigation(
                     onClickChange = { navController.navigate(Screens.Home.route) }
                 )
             }
+            composable(Screens.Web.route + "/{url}") {
+                val url = it.arguments?.getString("url").toString()
+                WebWant(url = url)
+            }
         }
     )
 }
@@ -82,4 +88,5 @@ sealed class Screens(
     object Add: Screens("add")
     object Preview: Screens("preview")
     object Edit: Screens("edit")
+    object Web: Screens("web")
 }

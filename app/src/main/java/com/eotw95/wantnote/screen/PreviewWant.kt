@@ -32,6 +32,8 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.rememberAsyncImagePainter
 import com.eotw95.wantnote.KEY_EMPTY
 import java.io.File
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @OptIn(ExperimentalMaterial3Api::class)
@@ -43,7 +45,8 @@ fun PreviewWant(
     imagePath: String,
     onClickBack: () -> Unit,
     onClickEdit: () -> Unit,
-    onClickDelete: () -> Unit
+    onClickDelete: () -> Unit,
+    onClickUri: (String) -> Unit
 ) {
     var previewVM: PreviewWantViewModel? = null
     LocalViewModelStoreOwner.current?.let {
@@ -107,7 +110,12 @@ fun PreviewWant(
                 ) {
                     Icon(imageVector = Icons.Filled.Info, contentDescription = null)
                     Spacer(modifier = Modifier.padding(horizontal = 5.dp))
-                    Text(text = if (link == KEY_EMPTY) "" else link)
+
+                    val encoderUrl = URLEncoder.encode(link, StandardCharsets.UTF_8.toString())
+                    Text(
+                        text = if (link == KEY_EMPTY) "" else link,
+                        modifier = Modifier.clickable { onClickUri(encoderUrl) }
+                    )
                 }
                 Spacer(modifier = Modifier.padding(vertical = 30.dp))
                 Text(text = if (description == KEY_EMPTY) "" else description)
