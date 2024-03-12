@@ -39,12 +39,12 @@ class AddWantViewModel(private val application: Application): ViewModel() {
     private val db = WantDatabase.getInstanse(application.applicationContext)
     private val wantRepository = WantRepository(db)
 
-    fun setImage(image: Uri) {
+    fun setImage(image: Uri?) {
         uriToBitmap(application.applicationContext.contentResolver, image)?.let { bitmap ->
             saveImageInternalStorage(bitmap)?.let {path ->
                 _imagePath.postValue(path)
             }
-        }
+        } ?: _imagePath.postValue(null)
     }
 
     fun add(item: WantItem) {
@@ -57,12 +57,16 @@ class AddWantViewModel(private val application: Application): ViewModel() {
         }
     }
 
-    private fun uriToBitmap(contentResolver: ContentResolver, uri: Uri): Bitmap? {
-        return try {
-            val inputStream = contentResolver.openInputStream(uri)
-            BitmapFactory.decodeStream(inputStream)
-        } catch (e: IOException) {
-            e.stackTraceToString()
+    private fun uriToBitmap(contentResolver: ContentResolver, uri: Uri?): Bitmap? {
+        return if (uri != null) {
+            try {
+                val inputStream = contentResolver.openInputStream(uri)
+                BitmapFactory.decodeStream(inputStream)
+            } catch (e: IOException) {
+                e.stackTraceToString()
+                null
+            }
+        } else {
             null
         }
     }
