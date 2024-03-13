@@ -15,8 +15,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material.icons.filled.Delete
-import androidx.compose.material.icons.filled.Edit
-import androidx.compose.material.icons.filled.Info
+import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -68,23 +67,15 @@ fun PreviewWant(
                     contentDescription = null,
                     modifier = Modifier.clickable { onClickBack() }
                 )
-                Row {
-                    Icon(
-                        imageVector = Icons.Filled.Edit,
-                        contentDescription = null,
-                        modifier = Modifier.clickable { onClickEdit() }
-                    )
-                    Spacer(modifier = Modifier.padding(15.dp))
-                    Icon(
-                        imageVector = Icons.Filled.Delete,
-                        contentDescription = null,
-                        modifier = Modifier.clickable {
-                            Log.d("PreviewWantList", "id=$id")
-                            previewVM?.delete(id)
-                            onClickDelete()
-                        }
-                    )
-                }
+                Icon(
+                    imageVector = Icons.Filled.Delete,
+                    contentDescription = null,
+                    modifier = Modifier.clickable {
+                        Log.d("PreviewWantList", "id=$id")
+                        previewVM?.delete(id)
+                        onClickDelete()
+                    }
+                )
             }
         }
     ) {
@@ -108,13 +99,23 @@ fun PreviewWant(
                 Row(
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Icon(imageVector = Icons.Filled.Info, contentDescription = null)
+                    Icon(imageVector = Icons.Filled.ExitToApp, contentDescription = null)
                     Spacer(modifier = Modifier.padding(horizontal = 5.dp))
 
+                    var isLink = false
+                    val linkText = if (link.startsWith("http")) {
+                        isLink = true
+                        if (link.length > 30) link.substring(0, 40) + "..."
+                        else link
+                    } else {
+                        "商品リンク無し"
+                    }
                     val encoderUrl = URLEncoder.encode(link, StandardCharsets.UTF_8.toString())
                     Text(
-                        text = if (link == KEY_EMPTY) "" else link,
-                        modifier = Modifier.clickable { onClickUri(encoderUrl) }
+                        text = linkText,
+                        modifier = Modifier.clickable {
+                            if (isLink) onClickUri(encoderUrl)
+                        }
                     )
                 }
                 Spacer(modifier = Modifier.padding(vertical = 30.dp))
