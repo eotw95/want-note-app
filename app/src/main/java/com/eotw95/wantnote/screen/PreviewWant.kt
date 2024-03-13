@@ -96,27 +96,26 @@ fun PreviewWant(
                     modifier = Modifier.fillMaxWidth().aspectRatio(1f)
                 )
                 Spacer(modifier = Modifier.padding(vertical = 30.dp))
+
+                var isLink = false
+                val linkText = if (link.startsWith("http")) {
+                    isLink = true
+                    if (link.length > 30) link.substring(0, 40) + "..."
+                    else link
+                } else {
+                    "商品リンク無し"
+                }
+                val encoderUrl = URLEncoder.encode(link, StandardCharsets.UTF_8.toString())
+
                 Row(
-                    verticalAlignment = Alignment.CenterVertically
+                    verticalAlignment = Alignment.CenterVertically,
+                    modifier = Modifier.clickable {
+                        if (isLink) onClickUri(encoderUrl)
+                    }
                 ) {
                     Icon(imageVector = Icons.Filled.ExitToApp, contentDescription = null)
                     Spacer(modifier = Modifier.padding(horizontal = 5.dp))
-
-                    var isLink = false
-                    val linkText = if (link.startsWith("http")) {
-                        isLink = true
-                        if (link.length > 30) link.substring(0, 40) + "..."
-                        else link
-                    } else {
-                        "商品リンク無し"
-                    }
-                    val encoderUrl = URLEncoder.encode(link, StandardCharsets.UTF_8.toString())
-                    Text(
-                        text = linkText,
-                        modifier = Modifier.clickable {
-                            if (isLink) onClickUri(encoderUrl)
-                        }
-                    )
+                    Text(text = linkText)
                 }
                 Spacer(modifier = Modifier.padding(vertical = 30.dp))
                 Text(text = if (description == KEY_EMPTY) "" else description)

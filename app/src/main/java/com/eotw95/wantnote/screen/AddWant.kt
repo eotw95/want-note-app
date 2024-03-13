@@ -52,7 +52,7 @@ fun AddWant(
         var desc by remember { mutableStateOf("") }
         val imagePath = AddWantViewModel.imagePath.observeAsState()
 
-        Spacer(modifier = Modifier.padding(vertical = 30.dp))
+        Spacer(modifier = Modifier.padding(vertical = 5.dp))
         OutlinedTextField(
             value = link,
             onValueChange = {
@@ -60,25 +60,26 @@ fun AddWant(
             },
             placeholder = {
                 Text(text = "リンク")
-            }
+            },
+            maxLines = 5
         )
-        Spacer(modifier = Modifier.padding(vertical = 30.dp))
+        Spacer(modifier = Modifier.padding(vertical = 5.dp))
         Divider(thickness = 0.5.dp)
-        Spacer(modifier = Modifier.padding(vertical = 30.dp))
+        Spacer(modifier = Modifier.padding(vertical = 5.dp))
         OutlinedButton(onClick = { onClickSetImage() }
         ) {
             Text(text = "画像を追加")
         }
-        Spacer(modifier = Modifier.padding(vertical = 30.dp))
+        Spacer(modifier = Modifier.padding(vertical = 5.dp))
         Image(
             painter = rememberAsyncImagePainter(model = imagePath.value?.let { File(it) }),
             contentDescription = null,
             contentScale = ContentScale.Crop,
             modifier = Modifier.size(150.dp)
         )
-        Spacer(modifier = Modifier.padding(vertical = 30.dp))
+        Spacer(modifier = Modifier.padding(vertical = 5.dp))
         Divider(thickness = 0.5.dp)
-        Spacer(modifier = Modifier.padding(vertical = 30.dp))
+        Spacer(modifier = Modifier.padding(vertical = 5.dp))
         OutlinedTextField(
             value = desc,
             onValueChange = {
@@ -88,9 +89,9 @@ fun AddWant(
                 Text(text = "メモ")
             }
         )
-        Spacer(modifier = Modifier.padding(vertical = 30.dp))
+        Spacer(modifier = Modifier.padding(vertical = 5.dp))
         Divider(thickness = 0.5.dp)
-        Spacer(modifier = Modifier.padding(vertical = 30.dp))
+        Spacer(modifier = Modifier.padding(vertical = 5.dp))
         OutlinedButton(
             onClick = {
                 onClickAdd()
